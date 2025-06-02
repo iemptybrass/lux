@@ -3,10 +3,10 @@
 with lib;
 
 let
-  cfg = config.rebuildHook;
+  cfg = config.lux;
 in
 {
-  options.rebuildHook = {
+  options.lux = {
     enable = mkOption {
       type = types.bool;
       default = false;
