@@ -1,37 +1,48 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
+  cfg = config.rebuildHook;
+in
 {
-
-  environment.etc."rebuild/hooks/pre-rebuild.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      echo "[FREAKY] activating tickle monster..."
-    '';
-    mode = "0755";
+  options.rebuildHook = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable pre-rebuild hook and nixos-rebuild wrapper.";
+    };
   };
 
-  # Replace nixos-rebuild with a wrapper
-  environment.etc."rebuild/bin/nixos-rebuild" = {
-    text = ''
-      #!/usr/bin/env bash
-      /etc/rebuild/hooks/pre-rebuild.sh || {
-        echo "[HOOK] Failed. Aborting rebuild."
-        exit 1
-      }
-      exec /run/current-system/sw/bin/nixos-rebuild "$@"
+  config = mkIf cfg.enable {
+    environment.etc."rebuild/hooks/pre-rebuild.sh" = {
+      text = ''
+        #!/usr/bin/env bash
+        echo "[FREAKY] activating tickle monster..."
+      '';
+      mode = "0755";
+    };
+
+    environment.etc."rebuild/bin/nixos-rebuild" = {
+      text = ''
+        #!/usr/bin/env bash
+        /etc/rebuild/hooks/pre-rebuild.sh || {
+          echo "[HOOK] Failed. Aborting rebuild."
+          exit 1
+        }
+        exec /run/current-system/sw/bin/nixos-rebuild "$@"
+      '';
+      mode = "0755";
+    };
+
+    environment.variables.PATH = [
+      "/etc/rebuild/bin"
+      "$PATH"
+    ];
+
+    security.sudo.extraConfig = ''
+      Defaults secure_path="/etc/rebuild/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+      Defaults env_keep += "PATH"
     '';
-    mode = "0755";
   };
-
-  # Make sure our wrapper is found first
-  environment.variables.PATH = [
-    "/etc/rebuild/bin"
-    "$PATH"
-  ];
-
-  # Ensure sudo sees the correct path
-  security.sudo.extraConfig = ''
-    Defaults secure_path="/etc/rebuild/bin:/run/wrappers/bin:/run/current-system/sw/bin"
-    Defaults env_keep += "PATH"
-  '';
-
 }
