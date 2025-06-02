@@ -2,19 +2,18 @@
 
 with lib;
 
-let
-  cfg = config.lux;
-in
 {
-  options.lux = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable pre-rebuild hook and nixos-rebuild wrapper.";
+  options = {
+    lux = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable pre-rebuild hook and nixos-rebuild wrapper.";
+      };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf config.lux.enable {
     environment.etc."rebuild/hooks/pre-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
