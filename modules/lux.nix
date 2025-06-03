@@ -7,7 +7,7 @@ with lib;
     lux = {
       enable = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = "Enable pre-rebuild hook and nixos-rebuild wrapper.";
       };
     };
