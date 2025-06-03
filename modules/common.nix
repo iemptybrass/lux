@@ -1,5 +1,5 @@
 {
-  inputs = [
+  imports = [
   ./inputs.nix
   ./lux.nix
   ];
