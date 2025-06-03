@@ -3,15 +3,14 @@
 with lib;
 
 {
-  options.outputs = mkOption {
-    type = lib.types.submodule {
-      options = {
-        modules = mkOption {
-          type = lib.types.listOf lib.types.unspecified;
-          default = [];
-        };
-      };
-    };
+  options.outputs.modules = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.attrsOf (     
+        lib.types.attrsOf (   
+          lib.types.unspecified 
+        )
+      )
+    );
     default = {};
   };
 
