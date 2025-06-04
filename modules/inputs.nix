@@ -12,6 +12,7 @@ with lib;
     assertions = [
       {
         assertion = config.inputs == "" || builtins.match "^[a-zA-Z]$" config.inputs != null;
+        message = " test ";
        }
     ];
   };
