@@ -41,26 +41,34 @@ with lib;
           };
         };
 
-        config = lib.mkMerge [
-          (lib.mkIf true (
-            lib.mkAssert (
-              let
-                urlSet = config.url != "";
-                typeSet = config.type != "";
-                ownerSet = config.owner != "";
-                repoSet = config.repo != "";
-                anyOfTypeOwnerRepoSet = typeSet || ownerSet || repoSet;
-                allOfTypeOwnerRepoSet = typeSet && ownerSet && repoSet;
-              in
-                (urlSet && !anyOfTypeOwnerRepoSet) ||  # Only url
-                (!urlSet && allOfTypeOwnerRepoSet)     # Or only type+owner+repo
-            ) ''
-              You must either:
-              - Set `url` alone, with `type`, `owner`, and `repo` empty, or
-              - Set all of `type`, `owner`, and `repo`, with `url` empty.
-            ''
-          ))
-        ];
+config = lib.mkMerge [
+  (lib.mkIf true (
+    lib.mkAssert (
+      let
+        urlSet = config.url != "";
+        typeSet = config.type != "";
+        ownerSet = config.owner != "";
+        repoSet = config.repo != "";
+
+        anyOfTypeOwnerRepoSet = typeSet || ownerSet || repoSet;
+        allOfTypeOwnerRepoSet = typeSet && ownerSet && repoSet;
+
+        invalid = if anyOfTypeOwnerRepoSet then
+          # If any of type/owner/repo are set
+          (!(allOfTypeOwnerRepoSet) || urlSet)
+        else
+          # none set: require url set
+          (!urlSet);
+      in
+        !invalid
+    ) ''
+      You must either:
+      - Set only `url` (and leave `type`, `owner`, and `repo` empty), or
+      - Set all of `type`, `owner`, and `repo` (and leave `url` empty).
+    ''
+  ))
+];
+
       })
     );
     default = {};
