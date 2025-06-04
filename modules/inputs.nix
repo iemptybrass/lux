@@ -41,38 +41,36 @@ with lib;
           };
         };
 
-config = lib.mkMerge [
-  (lib.mkIf true (
-    lib.mkAssert (
-      let
-        urlSet = config.url != "";
-        typeSet = config.type != "";
-        ownerSet = config.owner != "";
-        repoSet = config.repo != "";
+        config = lib.mkMerge [
+          (lib.mkIf true (
+            lib.mkAssert (
+              let
+                urlSet = config.url != "";
+                typeSet = config.type != "";
+                ownerSet = config.owner != "";
+                repoSet = config.repo != "";
 
-        anySet = typeSet || ownerSet || repoSet;
-        allSet = typeSet && ownerSet && repoSet;
+                anySet = typeSet || ownerSet || repoSet;
+                allSet = typeSet && ownerSet && repoSet;
 
-        invalid =
-          if anySet then
-            urlSet || (!allSet)
-          else
-            !urlSet;
-      in
-        !invalid
-    ) ''
-      Invalid flake input setup:
-      - If `type`, `owner`, or `repo` are set, `url` must be unset and all of `type`, `owner`, `repo` must be set.
-      - Otherwise, `url` must be set and `type`, `owner`, `repo` must be unset.
-    ''
-  ))
-];
-
-
+                invalid =
+                  if anySet then
+                    urlSet || (!allSet)
+                  else
+                    !urlSet;
+              in
+                !invalid
+            ) ''
+              Invalid flake input setup:
+              - If `type`, `owner`, or `repo` are set, `url` must be unset and all of `type`, `owner`, `repo` must be set.
+              - Otherwise, `url` must be set and `type`, `owner`, `repo` must be unset.
+            ''
+          ))
+        ];
       })
     );
     default = {};
   };
 
-  config = {};
+  config._forceInputsEval = lib.mkForce config.inputs;
 }
