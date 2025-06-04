@@ -19,6 +19,7 @@ with lib;
           inputs = lib.mkOption {
             type = lib.types.attrsOf (
               lib.types.submodule {
+                freeformType = null; 
                 options = {
                   follows = lib.mkOption {
                     type = lib.types.str;
