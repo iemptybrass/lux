@@ -10,22 +10,18 @@ with lib;
           url = lib.mkOption {
             type = lib.types.str;
             default = "";
-            description = "URL of the flake input.";
           };
           type = lib.mkOption {
             type = lib.types.str;
             default = "";
-            description = "Type of the flake input (e.g., github).";
           };
           owner = lib.mkOption {
             type = lib.types.str;
             default = "";
-            description = "Owner of the repository.";
           };
           repo = lib.mkOption {
             type = lib.types.str;
             default = "";
-            description = "Repository name.";
           };
           nixosModules = lib.mkOption {
             type = lib.types.unspecified;
