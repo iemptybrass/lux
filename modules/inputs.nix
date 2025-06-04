@@ -44,9 +44,21 @@ with lib;
         config = lib.mkMerge [
           (lib.mkIf true (
             lib.mkAssert (
-              (config.url != "") || 
-              (config.type != "" && config.owner != "" && config.repo != "")
-            ) "You must set either `url`, or all of `type`, `owner`, and `repo` for each input."
+              let
+                urlSet = config.url != "";
+                typeSet = config.type != "";
+                ownerSet = config.owner != "";
+                repoSet = config.repo != "";
+                anyOfTypeOwnerRepoSet = typeSet || ownerSet || repoSet;
+                allOfTypeOwnerRepoSet = typeSet && ownerSet && repoSet;
+              in
+                (urlSet && !anyOfTypeOwnerRepoSet) ||  # Only url
+                (!urlSet && allOfTypeOwnerRepoSet)     # Or only type+owner+repo
+            ) ''
+              You must either:
+              - Set `url` alone, with `type`, `owner`, and `repo` empty, or
+              - Set all of `type`, `owner`, and `repo`, with `url` empty.
+            ''
           ))
         ];
       })
