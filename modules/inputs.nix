@@ -1,18 +1,18 @@
-{ lib, config, ... }:
+{ lib, ... }:
 
 with lib;
 
 {
   options.inputs = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = "Whether to enable inputs.";
+    type = lib.types.str;
+    default = "a";
+    description = "A single upper or lowercase letter.";
   };
 
   config = {
     assertions = [
       {
-        assertion = config.inputs == true || config.inputs == false;
+        assertion = builtins.match "^[a-zA-Z]$" config.inputs != null;
       }
     ];
   };
