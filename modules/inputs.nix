@@ -6,20 +6,26 @@ with lib;
   options.inputs = lib.mkOption {
     type = lib.types.attrsOf (
       lib.types.submodule {
-        freeformType = null; 
         options = {
           url = lib.mkOption {
             type = lib.types.str;
             default = "";
           };
-          nixosModules = lib.mkOption {
+          type = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
+          owner = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+          };
+          repo = lib.mkOption {
             type = lib.types.str;
             default = "";
           };
           inputs = lib.mkOption {
             type = lib.types.attrsOf (
               lib.types.submodule {
-                freeformType = null; 
                 options = {
                   follows = lib.mkOption {
                     type = lib.types.str;
