@@ -10,11 +10,9 @@ with lib;
   };
 
   config = {
-    # Example of how you could use it
     assertions = [
       {
         assertion = config.inputs == true || config.inputs == false;
-        message = "inputs must be a boolean.";
       }
     ];
   };
