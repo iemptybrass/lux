@@ -50,24 +50,24 @@ config = lib.mkMerge [
         ownerSet = config.owner != "";
         repoSet = config.repo != "";
 
-        anyOfTypeOwnerRepoSet = typeSet || ownerSet || repoSet;
-        allOfTypeOwnerRepoSet = typeSet && ownerSet && repoSet;
+        anySet = typeSet || ownerSet || repoSet;
+        allSet = typeSet && ownerSet && repoSet;
 
-        invalid = if anyOfTypeOwnerRepoSet then
-          # If any of type/owner/repo are set
-          (!(allOfTypeOwnerRepoSet) || urlSet)
-        else
-          # none set: require url set
-          (!urlSet);
+        invalid =
+          if anySet then
+            urlSet || (!allSet)
+          else
+            !urlSet;
       in
         !invalid
     ) ''
-      You must either:
-      - Set only `url` (and leave `type`, `owner`, and `repo` empty), or
-      - Set all of `type`, `owner`, and `repo` (and leave `url` empty).
+      Invalid flake input setup:
+      - If `type`, `owner`, or `repo` are set, `url` must be unset and all of `type`, `owner`, `repo` must be set.
+      - Otherwise, `url` must be set and `type`, `owner`, `repo` must be unset.
     ''
   ))
 ];
+
 
       })
     );
