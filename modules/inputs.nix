@@ -5,15 +5,14 @@ with lib;
 {
   options.inputs = lib.mkOption {
     type = lib.types.str;
-    default = "a";
-    description = "A single upper or lowercase letter.";
+    default = "";
   };
 
   config = {
     assertions = [
       {
-        assertion = builtins.match "^[a-zA-Z]$" config.inputs != null;
-      }
+        assertion = config.inputs == "" || builtins.match "^[a-zA-Z]$" config.inputs != null;
+       }
     ];
   };
 }
