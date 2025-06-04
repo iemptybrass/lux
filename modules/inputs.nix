@@ -4,7 +4,7 @@ with lib;
 
 {
   options.inputs = lib.mkOption {
-    type = lib.types.str;
+    type = lib.types.unspecified;
     default = "";
   };
 
