@@ -4,26 +4,18 @@ with lib;
 
 {
   options.inputs = lib.mkOption {
-    type = lib.types.attrsOf lib.types.strMatching "^[a-z0-9-]+$" (
-      lib.types.submodule {
-        options = {
-          url = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-          };
-          follows = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-          };
-          nixosModules = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-          };
-        };
-      }
-    );
-    default = {};
+    type = lib.types.bool;
+    default = false;
+    description = "Whether to enable inputs.";
   };
 
-  config = {};
+  config = {
+    # Example of how you could use it
+    assertions = [
+      {
+        assertion = config.inputs == true || config.inputs == false;
+        message = "inputs must be a boolean.";
+      }
+    ];
+  };
 }
