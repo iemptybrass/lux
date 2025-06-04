@@ -2,6 +2,10 @@
 
 with lib;
 
+
+let
+  cfg = config;
+in
 {
   options.inputs = lib.mkOption {
     type = lib.types.unspecified;
@@ -11,7 +15,7 @@ with lib;
   config = {
     assertions = [
       {
-        assertion = config.inputs == "" || builtins.match "^[a-zA-Z]$" config.inputs != null;
+        assertion = cfg.inputs == "" || builtins.match "^[a-zA-Z]$" cfg.inputs != null;
         message = " test ";
        }
     ];
