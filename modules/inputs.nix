@@ -19,7 +19,7 @@ let
 
   check = x: y: z:
     let
-      a = 
+      extractor = 
         if x == "names" 
           then
             attrNames
@@ -27,7 +27,7 @@ let
             inputs: map (i: i.${x}) (attrValues inputs);
     in
       all (b:
-        regex y (a z.${b}.inputs)
+        regex y (extractor z.${b}.inputs)
       ) (attrNames z);
 
 in
