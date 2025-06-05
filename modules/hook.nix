@@ -1,18 +1,4 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
 {
-  options = {
-    lux = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
-    };
-  };
-
-  config = mkIf config.lux.enable {
     environment.etc."rebuild/hooks/pre-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
@@ -42,5 +28,4 @@ with lib;
       Defaults secure_path="/etc/rebuild/bin:/run/wrappers/bin:/run/current-system/sw/bin"
       Defaults env_keep += "PATH"
     '';
-  };
 }
