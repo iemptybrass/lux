@@ -15,7 +15,7 @@ in
   config = {
     assertions = [
       {
-        assertion = cfg.inputs == "" || builtins.match "^[a-zA-Z]$" cfg.inputs != null;
+        assertion = cfg.inputs == "" || builtins.match "^[a-zA-Z]{1,32}$" cfg.inputs != null;
         message = " test ";
        }
     ];
