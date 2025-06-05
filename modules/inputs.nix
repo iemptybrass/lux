@@ -1,8 +1,9 @@
 { lib, config, ... }:
 
-inherit lib;
 
 let
+  inherit (lib) mkOption types attrNames;
+
   cfg = config;
 
   reg = "^[a-zA-Z0-9_-]+$";
