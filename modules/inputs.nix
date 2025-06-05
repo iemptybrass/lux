@@ -7,13 +7,27 @@ let
 
   reg = "^[a-zA-Z]{1,32}$";
   url = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
+  mod = "^[a-zA-Z0-9._+-]{1,255}$";
 
-  checkNames = names: all (n: builtins.match reg n != null) names;
-  checkFollows = inputs:
-    all (f: builtins.match reg f != null)
-      (map (i: i.follows) (attrValues inputs));
-  checkUrls = inputs:
-    all (i: builtins.match url i.url != null) (attrValues inputs);
+  regex = pattern: value:
+    if builtins.isList value then
+      all (str: builtins.match pattern str != null) value
+    else
+      builtins.match pattern value != null;
+
+  get = field: inputs: map (i: i.${field}) (attrValues inputs);
+
+  checkNested = what: pattern: outerInputs:
+    let
+      extractor = if what == "names" then
+        attrNames
+      else
+        inputs: map (i: i.${what}) (attrValues inputs);
+    in
+      all (outerName:
+        regex pattern (extractor outerInputs.${outerName}.inputs)
+      ) (attrNames outerInputs);
+
 in
 {
   options.inputs = mkOption {
@@ -35,6 +49,10 @@ in
           type = types.str;
           default = "";
         };
+        nixosModules = mkOption {
+          type = types.str;
+          default = "";
+        };
       };
     });
   };
@@ -42,23 +60,19 @@ in
   config = {
     assertions = [
       {
-        assertion = checkNames (attrNames cfg.inputs);
+        assertion = regex reg (attrNames cfg.inputs);
         message = "All input names must be a maximum of 32 letters (a-z, A-Z).";
       }
       {
-        assertion = all (outerName:
-          checkNames (attrNames cfg.inputs.${outerName}.inputs)
-        ) (attrNames cfg.inputs);
-        message = "All input names must be a maximum of 32 letters (a-z, A-Z).";
+        assertion = checkNested "names" reg cfg.inputs;
+        message = "All inner input names must be a maximum of 32 letters (a-z, A-Z).";
       }
       {
-        assertion = all (outerName:
-          checkFollows (cfg.inputs.${outerName}.inputs)
-        ) (attrNames cfg.inputs);
-        message = "Each follows must be a non-empty string with maximum of 32 letters letters.";
+        assertion = checkNested "follows" reg cfg.inputs;
+        message = "Each follows must be a non-empty string with a maximum of 32 letters.";
       }
       {
-        assertion = checkUrls cfg.inputs;
+        assertion = regex url (get "url" cfg.inputs);
         message = "Each input.{name}.url must match 'owner:repo/path' format.";
       }
     ];
