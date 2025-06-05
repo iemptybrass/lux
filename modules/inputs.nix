@@ -5,30 +5,30 @@ with lib;
 let
   cfg = config;
 
-  reg = "^[a-zA-Z0-9_-]{1,32}$";
+  reg = "^[a-zA-Z0-9_-]+$";
   url = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
 
-  regex = x: y:
-    if builtins.isList y 
+  regex = pattern: value:
+    if builtins.isList value 
       then
-        all (a: builtins.match x a != null) y
+        all (str: builtins.match pattern str != null) value
       else
-        builtins.match x y != null;
+        builtins.match pattern value != null;
 
-  get = x: y: map (i: i.${x}) (attrValues y);
+  get = field: value: map (i: i.${field}) (attrValues value);
 
-  check = x: y: z:
+  check = what: pattern: outerInputs:
     let
       extractor = 
-        if x == "names" 
+        if what == "names" 
           then
             attrNames
           else
-            inputs: map (i: i.${x}) (attrValues inputs);
+            inputs: map (i: i.${what}) (attrValues inputs);
     in
-      all (b:
-        regex y (extractor z.${b}.inputs)
-      ) (attrNames z);
+      all (outerName:
+        regex pattern (extractor outerInputs.${outerName}.inputs)
+      ) (attrNames outerInputs);
 
 in
 {
