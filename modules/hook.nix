@@ -21,7 +21,7 @@ with lib;
       mode = "0755";
     };
 
-    environment.etc."rebuild/bin/nixos-rebuild" = {
+    environment.etc."rebuild/bin/nixos-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
         /etc/rebuild/hooks/pre-rebuild.sh || {
