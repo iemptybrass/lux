@@ -17,18 +17,18 @@ let
 
   get = field: value: map (i: i.${field}) (attrValues value);
 
-  check = what: pattern: outerInputs:
+  check = what: pattern: inputs:
     let
-      extractor = 
+      extract = 
         if what == "names" 
           then
             attrNames
           else
             inputs: map (i: i.${what}) (attrValues inputs);
     in
-      all (outerName:
-        regex pattern (extractor outerInputs.${outerName}.inputs)
-      ) (attrNames outerInputs);
+      all (name:
+        regex pattern (extract inputs.${name}.inputs)
+      ) (attrNames inputs);
 
 in
 {
@@ -55,23 +55,23 @@ in
     assertions = [
       {
         assertion = regex reg (attrNames cfg.inputs);
-        message = "All input names must be a maximum of 32 letters (a-z, A-Z).";
+        message = "";
       }
       {
         assertion = check "names" reg cfg.inputs;
-        message = "All inner input names must be a maximum of 32 letters (a-z, A-Z).";
+        message = "";
       }
       {
         assertion = check "follows" reg cfg.inputs;
-        message = "Each follows must be a non-empty string with a maximum of 32 letters.";
+        message = "";
       }
       {
         assertion = regex url (get "url" cfg.inputs);
-        message = "Each input.{name}.url must match 'owner:repo/path' format.";
+        message = "";
       }
       {
         assertion = regex reg (get "nixosModules" cfg.inputs);
-        message = "Each input.{name}.nixosModules must be a valid filename.";
+        message = "";
       }
     ];
   };
