@@ -8,6 +8,8 @@ let
   reg = "^[a-zA-Z0-9_-]+$";
   url = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
 
+  error = "Check your .lix file for option formatting!"
+
   regex = regex: value:
     if builtins.isList value 
       then
@@ -55,23 +57,23 @@ in
     assertions = [
       {
         assertion = regex reg (attrNames cfg.inputs);
-        message = "";
+        message = error;
       }
       {
         assertion = regex url (get "url" cfg.inputs);
-        message = "";
+        message = error;
       }
       {
         assertion = regex reg (get "nixosModules" cfg.inputs);
-        message = "";
+        message = error;
       }
       {
         assertion = check "names" reg cfg.inputs;
-        message = "";
+        message = error;
       }
       {
         assertion = check "follows" reg cfg.inputs;
-        message = "";
+        message = error;
       }
     ];
   };
