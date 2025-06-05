@@ -58,19 +58,19 @@ in
         message = "";
       }
       {
-        assertion = check "names" reg cfg.inputs;
-        message = "";
-      }
-      {
-        assertion = check "follows" reg cfg.inputs;
-        message = "";
-      }
-      {
         assertion = regex url (get "url" cfg.inputs);
         message = "";
       }
       {
         assertion = regex reg (get "nixosModules" cfg.inputs);
+        message = "";
+      }
+      {
+        assertion = check "names" reg cfg.inputs;
+        message = "";
+      }
+      {
+        assertion = check "follows" reg cfg.inputs;
         message = "";
       }
     ];
