@@ -34,6 +34,14 @@ in
     default = {};
     type = types.attrsOf (types.submodule {
       options = {
+        url = mkOption {
+          type = types.str;
+          default = "";
+        };
+        nixosModules = mkOption {
+          type = types.str;
+          default = "";
+        };
         inputs = mkOption {
           default = {};
           type = types.attrsOf (types.submodule {
@@ -44,14 +52,6 @@ in
               };
             };
           });
-        };
-        url = mkOption {
-          type = types.str;
-          default = "";
-        };
-        nixosModules = mkOption {
-          type = types.str;
-          default = "";
         };
       };
     });
