@@ -16,7 +16,13 @@ with lib;
     environment.etc."rebuild/hooks/pre-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
-        echo "[LUX] activating <place holder>..."
+        LUX_FILE="/etc/rebuild/lux"
+        if [[ -f "$LUX_FILE" && "$(cat "$LUX_FILE")" == "1" ]]; then
+          echo "[LUX] Detected existing activation. Skipping initialization..."
+        else
+          echo "[LUX] First time activation. Setting up..."
+          echo "1" > "$LUX_FILE"
+        fi
       '';
       mode = "0755";
     };
