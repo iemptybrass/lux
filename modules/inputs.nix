@@ -8,7 +8,7 @@ let
   reg = "^[a-zA-Z0-9_-]+$";
   url = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
 
-  error = "Check your .lix file for option formatting!"
+  error = "Check your .lix file for option formatting!";
 
   regex = v: value:
     if builtins.isList value 
