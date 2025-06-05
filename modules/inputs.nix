@@ -40,7 +40,7 @@ in
           builtins.match "^[a-zA-Z]{1,32}$" outerName != null
         ) (builtins.attrNames cfg.inputs);
         message = "All input names must be 1–32 letters (a-z, A-Z).";
-      }
+      },
       {
         assertion = all (outerName:
           let
@@ -51,7 +51,7 @@ in
             ) innerNames
         ) (builtins.attrNames cfg.inputs);
         message = "All input names must be 1–32 letters (a-z, A-Z).";
-      }
+      },
 
       {
         assertion = all (outerName:
@@ -66,13 +66,15 @@ in
             ) innerNames
         ) (builtins.attrNames cfg.inputs);
         message = "Each follows must be a non-empty string of 1–32 letters.";
-      }
+      },
 
 
 
       {
         assertion = all (outerName:
-          let value = cfg.inputs.${outerName}.url; in
+          let 
+            value = cfg.inputs.${outerName}.url; 
+          in
             builtins.match "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[a-zA-Z0-9._/-]+$" value != null
         ) (builtins.attrNames cfg.inputs);
         message = "Each input.{name}.url must match 'owner:repo/path' format.";
