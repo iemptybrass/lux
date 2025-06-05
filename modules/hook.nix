@@ -5,22 +5,22 @@ with lib;
 {
   options = {
     lux = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
       };
     };
   };
 
-  config = mkIf config.lux.enable {
+  config = lib.mkIf config.lux.enable {
     environment.etc."rebuild/hooks/pre-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
         LUX_FILE="/etc/rebuild/lux"
         if [[ -f "$LUX_FILE" && "$(cat "$LUX_FILE")" == "1" ]]; then
-          echo "[LUX] Detected existing activation. Skipping initialization..."
+          :
         else
-          echo "[LUX] First time activation. Setting up..."
+          echo "[LUX] First time activation, rerun for changes to take effect..."
           echo "1" > "$LUX_FILE"
         fi
       '';
