@@ -1,6 +1,6 @@
 { lib, config, ... }:
 
-with lib;
+inherit lib;
 
 let
   cfg = config;
