@@ -8,12 +8,12 @@ let
   reg = "^[a-zA-Z0-9_-]+$";
   url = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
 
-  regex = pattern: value:
+  regex = regex: value:
     if builtins.isList value 
       then
-        all (str: builtins.match pattern str != null) value
+        all (str: builtins.match regex str != null) value
       else
-        builtins.match pattern value != null;
+        builtins.match regex value != null;
 
   get = field: value: map (i: i.${field}) (attrValues value);
 
