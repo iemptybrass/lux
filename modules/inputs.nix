@@ -10,12 +10,12 @@ let
 
   error = "Check your .lix file for option formatting!"
 
-  regex = regex: value:
+  regex = v: value:
     if builtins.isList value 
       then
-        all (str: builtins.match regex str != null) value
+        all (str: builtins.match v str != null) value
       else
-        builtins.match regex value != null;
+        builtins.match v value != null;
 
   get = field: value: map (i: i.${field}) (attrValues value);
 
