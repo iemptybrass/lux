@@ -1,6 +1,6 @@
 {
   imports = [
-    ./
+#    ./
   ];
     environment.etc."rebuild/test/file" = {
       text = ''
