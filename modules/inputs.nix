@@ -2,7 +2,7 @@
 
 
 let
-  inherit (lib) mkOption types attrNames;
+  inherit (lib) mkOption types attrNames attrValues;
 
   cfg = config;
 
