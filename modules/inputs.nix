@@ -75,7 +75,7 @@ in
           let 
             value = cfg.inputs.${outerName}.url; 
           in
-            builtins.match "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[a-zA-Z0-9._/-]+$" value != null
+            builtins.match "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$" value != null
         ) (builtins.attrNames cfg.inputs);
         message = "Each input.{name}.url must match 'owner:repo/path' format.";
       }
