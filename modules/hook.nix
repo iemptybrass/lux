@@ -16,7 +16,7 @@ with lib;
     environment.etc."rebuild/hooks/pre-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
-        echo "[FREAKY] activating tickle monster..."
+        echo "[Lix] activating <place holder>..."
       '';
       mode = "0755";
     };
