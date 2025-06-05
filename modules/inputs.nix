@@ -4,25 +4,36 @@ with lib;
 
 let
   cfg = config;
+
+  nameRegex = "^[a-zA-Z]{1,32}$";
+  followsRegex = "^[a-zA-Z]{1,32}$";
+  urlRegex = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
+
+  checkNames = names: all (n: builtins.match nameRegex n != null) names;
+  checkFollows = inputs:
+    all (f: builtins.match followsRegex f != null)
+      (map (i: i.follows) (attrValues inputs));
+  checkUrls = inputs:
+    all (i: builtins.match urlRegex i.url != null) (attrValues inputs);
 in
 {
-  options.inputs = lib.mkOption {
+  options.inputs = mkOption {
     default = {};
-    type = lib.types.attrsOf (lib.types.submodule {
+    type = types.attrsOf (types.submodule {
       options = {
-        inputs = lib.mkOption {
+        inputs = mkOption {
           default = {};
-          type = lib.types.attrsOf (lib.types.submodule {
+          type = types.attrsOf (types.submodule {
             options = {
-              follows = lib.mkOption {
-                type = lib.types.str;
+              follows = mkOption {
+                type = types.str;
                 default = "";
               };
             };
           });
         };
-        url = lib.mkOption {
-          type = lib.types.str;
+        url = mkOption {
+          type = types.str;
           default = "";
         };
       };
@@ -30,59 +41,27 @@ in
   };
 
   config = {
-
     assertions = [
-
-
-
       {
-        assertion = all (outerName:
-          builtins.match "^[a-zA-Z]{1,32}$" outerName != null
-        ) (builtins.attrNames cfg.inputs);
+        assertion = checkNames (attrNames cfg.inputs);
         message = "All input names must be 1–32 letters (a-z, A-Z).";
       }
       {
         assertion = all (outerName:
-          let
-            innerNames = builtins.attrNames cfg.inputs.${outerName}.inputs;
-          in
-            all (innerName:
-              builtins.match "^[a-zA-Z]{1,32}$" innerName != null
-            ) innerNames
-        ) (builtins.attrNames cfg.inputs);
-        message = "All input names must be 1–32 letters (a-z, A-Z).";
+          checkNames (attrNames cfg.inputs.${outerName}.inputs)
+        ) (attrNames cfg.inputs);
+        message = "All inner input names must be 1–32 letters (a-z, A-Z).";
       }
-
       {
         assertion = all (outerName:
-          let
-            innerNames = builtins.attrNames cfg.inputs.${outerName}.inputs;
-          in
-            all (innerName:
-              let
-                value = cfg.inputs.${outerName}.inputs.${innerName}.follows;
-              in
-                builtins.match "^[a-zA-Z]{1,32}$" value != null
-            ) innerNames
-        ) (builtins.attrNames cfg.inputs);
+          checkFollows (cfg.inputs.${outerName}.inputs)
+        ) (attrNames cfg.inputs);
         message = "Each follows must be a non-empty string of 1–32 letters.";
       }
-
-
-
       {
-        assertion = all (outerName:
-          let 
-            value = cfg.inputs.${outerName}.url; 
-          in
-            builtins.match "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$" value != null
-        ) (builtins.attrNames cfg.inputs);
+        assertion = checkUrls cfg.inputs;
         message = "Each input.{name}.url must match 'owner:repo/path' format.";
       }
-
-
-
     ];
-
   };
 }
