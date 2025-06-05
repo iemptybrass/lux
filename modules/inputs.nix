@@ -36,25 +36,18 @@ in
       options = {
         url = mkOption {
           type = types.str;
-          default = "";
-        };
+          default = ""; };
         nixosModules = mkOption {
           type = types.str;
-          default = "";
-        };
+          default = ""; };
         inputs = mkOption {
           default = {};
           type = types.attrsOf (types.submodule {
             options = {
               follows = mkOption {
                 type = types.str;
-                default = "";
-              };
-            };
-          });
-        };
-      };
-    });
+                default = ""; }; }; }  ); };
+      }; }  );
   };
 
   config = {
