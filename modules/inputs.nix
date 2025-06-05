@@ -50,7 +50,12 @@ in
             options = {
               follows = mkOption {
                 type = types.str;
-                default = ""; }; }; }  ); }; }; }  );
+                default = ""; }; 
+            }; 
+          }  ); 
+        }; 
+      }; 
+    }  );
   };
 
   config = {
