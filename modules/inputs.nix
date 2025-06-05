@@ -44,19 +44,19 @@ in
     assertions = [
       {
         assertion = checkNames (attrNames cfg.inputs);
-        message = "All input names must be 1–32 letters (a-z, A-Z).";
+        message = "All input names must be a maximum of 32 letters (a-z, A-Z).";
       }
       {
         assertion = all (outerName:
           checkNames (attrNames cfg.inputs.${outerName}.inputs)
         ) (attrNames cfg.inputs);
-        message = "All inner input names must be 1–32 letters (a-z, A-Z).";
+        message = "All input names must be a maximum of 32 letters (a-z, A-Z).";
       }
       {
         assertion = all (outerName:
           checkFollows (cfg.inputs.${outerName}.inputs)
         ) (attrNames cfg.inputs);
-        message = "Each follows must be a non-empty string of 1–32 letters.";
+        message = "Each follows must be a non-empty string with maximum of 32 letters letters.";
       }
       {
         assertion = checkUrls cfg.inputs;
