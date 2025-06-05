@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config;
 
-  reg = "^[a-zA-Z0-9_-]{1,32}$";
+  reg = "^[a-zA-Z0-9_-]+$";
   url = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
 
   regex = pattern: value:
