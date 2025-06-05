@@ -5,24 +5,18 @@ with lib;
 {
   options = {
     lux = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = true;
       };
     };
   };
 
-  config = lib.mkIf config.lux.enable {
+  config = mkIf config.lux.enable {
     environment.etc."rebuild/hooks/pre-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
-        LUX_FILE="/etc/rebuild/lux"
-        if [[ -f "$LUX_FILE" && "$(cat "$LUX_FILE")" == "1" ]]; then
-          :
-        else
-          echo "[LUX] First time activation, rerun for changes to take effect..."
-          echo "1" > "$LUX_FILE"
-        fi
+        echo "preprocessing configuration files..."
       '';
       mode = "0755";
     };
@@ -31,7 +25,7 @@ with lib;
       text = ''
         #!/usr/bin/env bash
         /etc/rebuild/hooks/pre-rebuild.sh || {
-          echo "[HOOK] Failed. Aborting rebuild."
+          echo "preprocessor failed aborting rebuild..."
           exit 1
         }
         exec /run/current-system/sw/bin/nixos-rebuild "$@"
