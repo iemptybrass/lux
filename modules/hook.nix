@@ -16,7 +16,7 @@ with lib;
     environment.etc."rebuild/hooks/pre-rebuild.sh" = {
       text = ''
         #!/usr/bin/env bash
-        echo "[Lix] activating <place holder>..."
+        echo "[LUX] activating <place holder>..."
       '';
       mode = "0755";
     };
