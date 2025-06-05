@@ -19,15 +19,15 @@ let
 
   check = x: y: z:
     let
-      extractor = 
+      a = 
         if x == "names" 
           then
             attrNames
           else
             inputs: map (i: i.${x}) (attrValues inputs);
     in
-      all (outerName:
-        regex y (extractor z.${outerName}.inputs)
+      all (b:
+        regex y (a z.${b}.inputs)
       ) (attrNames z);
 
 in
