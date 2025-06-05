@@ -1,5 +1,7 @@
 {
   outputs = { self, nixpkgs }: {
-    nixosModules.enable = ./modules/common.nix;
+    nixosModules = {
+      common = ./modules/common.nix;
+    };
   };
 }
