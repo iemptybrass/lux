@@ -5,16 +5,15 @@ with lib;
 let
   cfg = config;
 
-  nameRegex = "^[a-zA-Z]{1,32}$";
-  followsRegex = "^[a-zA-Z]{1,32}$";
-  urlRegex = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
+  reg = "^[a-zA-Z]{1,32}$";
+  url = "^[a-zA-Z]{1,39}:[a-zA-Z0-9-]{1,39}/[-a-zA-Z0-9._/]+$";
 
-  checkNames = names: all (n: builtins.match nameRegex n != null) names;
+  checkNames = names: all (n: builtins.match reg n != null) names;
   checkFollows = inputs:
-    all (f: builtins.match followsRegex f != null)
+    all (f: builtins.match reg f != null)
       (map (i: i.follows) (attrValues inputs));
   checkUrls = inputs:
-    all (i: builtins.match urlRegex i.url != null) (attrValues inputs);
+    all (i: builtins.match url i.url != null) (attrValues inputs);
 in
 {
   options.inputs = mkOption {
