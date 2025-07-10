@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-/etc/rebuild/run/init.sh "$@" || {
-  echo "failed"
-  exit 1
-}
+if [ -e "$3" ]; then
+  echo "Directory exists"
+  dir="$3"
+else
+  echo "Directory does not exist"
+  dir="."
+fi
+
 echo "$dir"
 /run/current-system/sw/bin/nixos-rebuild "$@"
 
