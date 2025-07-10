@@ -1,7 +1,8 @@
-{ lib, config, ... }:
-
-
-let
+{
+  lib,
+  config,
+  ...
+}: let
   inherit (lib) mkOption types attrNames attrValues all;
 
   cfg = config;
@@ -12,51 +13,48 @@ let
   error = "Check your .lix file for option formatting!";
 
   regex = regex: value:
-    if builtins.isList value 
-      then
-        all (str: builtins.match regex str != null) value
-      else
-        builtins.match regex value != null;
+    if builtins.isList value
+    then all (str: builtins.match regex str != null) value
+    else builtins.match regex value != null;
 
   get = field: value: map (i: i.${field}) (attrValues value);
 
-  check = what: pattern: inputs:
-    let
-      extract = 
-        if what == "names" 
-          then
-            attrNames
-          else
-            inputs: map (i: i.${what}) (attrValues inputs);
-    in
-      all (name:
+  check = what: pattern: inputs: let
+    extract =
+      if what == "names"
+      then attrNames
+      else inputs: map (i: i.${what}) (attrValues inputs);
+  in
+    all (
+      name:
         regex pattern (extract inputs.${name}.inputs)
-      ) (attrNames inputs);
-
-in
-{
+    ) (attrNames inputs);
+in {
   options.inputs = mkOption {
     default = {};
     type = types.attrsOf (types.submodule {
       options = {
         url = mkOption {
           type = types.str;
-          default = ""; };
+          default = "";
+        };
         nixosModules = mkOption {
           type = types.str;
-          default = ""; };
+          default = "";
+        };
         inputs = mkOption {
           default = {};
           type = types.attrsOf (types.submodule {
             options = {
               follows = mkOption {
                 type = types.str;
-                default = ""; }; 
-            }; 
-          }  ); 
-        }; 
-      }; 
-    }  );
+                default = "";
+              };
+            };
+          });
+        };
+      };
+    });
   };
 
   config = {

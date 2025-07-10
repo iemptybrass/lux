@@ -1,6 +1,6 @@
-{ pkgs, ... }:{
+{pkgs, ...}: {
   imports = [
-  ./inputs.nix
+    ./inputs.nix
   ];
 
   environment.variables.PATH = [
