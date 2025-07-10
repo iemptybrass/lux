@@ -11,8 +11,13 @@ else
   dir="$(pwd)"
 fi
 
+tmpdir="$(mktemp -d)"
+cp -r "$dir" "$tmpdir"
+
 args="${args[*]}"
-echo "/run/current-system/sw/bin/nixos-rebuild $1 --flake $dir $args"
-/run/current-system/sw/bin/nixos-rebuild "$1" --flake "$dir" "$args"
+echo "/run/current-system/sw/bin/nixos-rebuild $1 --flake $tmpdir $args"
+/run/current-system/sw/bin/nixos-rebuild "$1" --flake "$tmpdir" "$args"
+
+rm -rf "$tmpdir"
 
 echo "finished"
