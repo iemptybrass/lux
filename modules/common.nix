@@ -13,5 +13,9 @@
     Defaults env_keep += "PATH"
   '';
 
-  environment.etc."rebuild".source = ./rebuild;
+  environment.etc."rebuild".source = pkgs.runCommand "rebuild-scripts" {} ''
+    mkdir -p $out
+    cp -r ${./rebuild}/* $out/
+    chmod +x $out/nixos-rebuild
+  '';
 }
