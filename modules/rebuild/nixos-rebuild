@@ -12,7 +12,7 @@ else
 fi
 
 tmpdir="$(mktemp -d)"
-cp -r "$dir" "$tmpdir"
+cp -r "$dir"/* "$tmpdir"
 
 args="${args[*]}"
 echo "/run/current-system/sw/bin/nixos-rebuild $1 --flake $tmpdir $args"
