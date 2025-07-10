@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-echo "$3"
+if [ -e "$3" ]; then
+  echo "Directory exists"
+else
+  echo "Directory does not exist"
+fi
