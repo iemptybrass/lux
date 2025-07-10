@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+/etc/rebuild/run/init.sh || {
+  echo "[HOOK] Failed. Aborting rebuild."
+  exit 1
+}
+exec /run/current-system/sw/bin/nixos-rebuild "$@"
+echo "finished"
