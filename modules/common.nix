@@ -4,12 +4,12 @@
   ];
 
   environment.variables.PATH = [
-    "/etc/rebuild/bin"
+    "/etc/rebuild"
     "$PATH"
   ];
 
   security.sudo.extraConfig = ''
-    Defaults secure_path="/etc/rebuild/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+    Defaults secure_path="/etc/rebuild:/run/wrappers/bin:/run/current-system/sw/bin"
     Defaults env_keep += "PATH"
   '';
 
