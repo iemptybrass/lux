@@ -13,6 +13,6 @@ fi
 
 args="${args[*]}"
 echo "/run/current-system/sw/bin/nixos-rebuild $1 --flake $dir $args"
-/run/current-system/sw/bin/nixos-rebuild "$1 --flake $dir $args"
+/run/current-system/sw/bin/nixos-rebuild "$1" --flake "$dir" "$args"
 
 echo "finished"
