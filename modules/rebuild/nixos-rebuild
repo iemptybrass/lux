@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
-/etc/rebuild/run/init.sh "$@" || {
+export args=("$@")
+unset 'args[0]' 
+/etc/rebuild/run/init.sh || {
   echo "failed"
   exit 1
 }
+echo "$dir"
 /run/current-system/sw/bin/nixos-rebuild "$@"
+
 echo "finished"

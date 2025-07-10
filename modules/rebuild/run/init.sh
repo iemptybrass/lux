@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-if [ -e "$3" ]; then
+if [ -e "${args[3]}" ]; then
   echo "Directory exists"
+  export dir="${args[3]}"
 else
   echo "Directory does not exist"
+  export dir="."
 fi
