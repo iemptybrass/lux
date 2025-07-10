@@ -16,6 +16,6 @@
   environment.etc."rebuild".source = pkgs.runCommand "rebuild-scripts" {} ''
     mkdir -p $out
     cp -r ${./rebuild}/* $out/
-    chmod +x $out/nixos-rebuild
+    chmod +x $out/{nixos-rebuild, run/init.sh}
   '';
 }
