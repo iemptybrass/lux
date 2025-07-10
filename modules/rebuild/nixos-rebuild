@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-/etc/rebuild/run/init.sh || {
+/etc/rebuild/run/init.sh "$@" || {
   echo "failed"
   exit 1
 }
