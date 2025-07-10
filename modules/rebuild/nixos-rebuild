@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
-if [ -e "$3" ]; then
+args=("$@")
+args=("${args[@]:2}")
+
+if [ -e "${args[0]}" ]; then
   echo "Directory exists"
-  dir="$3"
+  dir=("${args[0]}")
+  args=("${args[@]:1}")
 else
   echo "Directory does not exist"
   dir="$(pwd)"
 fi
 
-echo "$dir"
-/run/current-system/sw/bin/nixos-rebuild "$@"
+args="${args[*]}"
+/run/current-system/sw/bin/nixos-rebuild "$1 --flake $dir $args"
 
 echo "finished"
