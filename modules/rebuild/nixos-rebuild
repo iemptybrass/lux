@@ -16,7 +16,7 @@ cp -r "$dir"/* "$tmpdir"
 
 args="${args[*]}"
 echo "/run/current-system/sw/bin/nixos-rebuild $1 --flake $tmpdir $args"
-ls "$args"
+ls "$tmpdir"
 /run/current-system/sw/bin/nixos-rebuild "$1" --flake "$tmpdir" "$args"
 
 rm -rf "$tmpdir"
