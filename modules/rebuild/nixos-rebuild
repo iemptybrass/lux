@@ -2,7 +2,12 @@
 args=("${@:3}")
 
 dir="${args[0]}"
-[ -e "$dir" ] && args=("${args[@]:1}") || dir="$(pwd)"
+if [ -e "$dir" ] 
+  then 
+    args=("${args[@]:1}") 
+  else 
+    dir="$(pwd)"
+fi
 
 tmpdir="$(mktemp -d)"
 
