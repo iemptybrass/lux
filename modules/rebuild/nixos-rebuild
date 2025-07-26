@@ -10,7 +10,6 @@ cp -r -- "$dir"/* "$tmpdir"
 
 args=("$tmpdir" "${args[@]}")
 
-echo "/run/current-system/sw/bin/nixos-rebuild $1 $2 ${args[@]}"
 /run/current-system/sw/bin/nixos-rebuild "$1" "$2" "${args[@]}"
 
 rm -rf "$tmpdir"
