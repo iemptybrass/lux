@@ -1,23 +1,21 @@
 #!/usr/bin/env bash
-args=("$@")
-args=("${args[@]:2}")
+args=("${@:3}")
 
 if [ -e "${args[0]}" ]; then
-  echo "Directory exists"
   dir=("${args[0]}")
   args=("${args[@]:1}")
 else
-  echo "Directory does not exist"
   dir="$(pwd)"
 fi
 
 tmpdir="$(mktemp -d)"
+
 cp -r "$dir"/* "$tmpdir"
 
-args="${args[*]}"
-echo "/run/current-system/sw/bin/nixos-rebuild $1 --flake $tmpdir ${args[@]}"
-ls "$tmpdir"
-/run/current-system/sw/bin/nixos-rebuild "$1" --flake "$tmpdir" "${args[@]}"
+args=("$tmpdir" "${args[@]}")
+
+echo "/run/current-system/sw/bin/nixos-rebuild $1 $2 ${args[@]}"
+/run/current-system/sw/bin/nixos-rebuild "$1" "$2" "${args[@]}"
 
 rm -rf "$tmpdir"
 
