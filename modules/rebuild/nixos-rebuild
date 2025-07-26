@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 args=("${@:3}")
 
-if [ -e "${args[0]}" ]; then
-  dir=("${args[0]}")
-  args=("${args[@]:1}")
-else
-  dir="$(pwd)"
-fi
+dir="${args[0]}"
+[ -e "$dir" ] && args=("${args[@]:1}") || dir="$(pwd)"
 
 tmpdir="$(mktemp -d)"
 
-cp -r "$dir"/* "$tmpdir"
+cp -r -- "$dir"/* "$tmpdir"
 
 args=("$tmpdir" "${args[@]}")
 
