@@ -9,20 +9,28 @@ if [ -e "$dir" ]
     dir="$(pwd)"
 fi
 
+
+
 tmpdir="$(mktemp -d)"
 
 cp -r -- "$dir"/* "$tmpdir"
 
 args=("$tmpdir" "${args[@]}")
 
-input_files=$(find "$tmpdir" -type f -name '*.input')
 
-for file in $input_files; do
+
+current="./*"
+
+for file in $current; do
     echo "Found: $file"
 done 
+
+
 
 /run/current-system/sw/bin/nixos-rebuild "$1" "$2" "${args[@]}"
 
 rm -rf "$tmpdir"
+
+
 
 echo "finished"
