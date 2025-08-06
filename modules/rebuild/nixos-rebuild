@@ -1,21 +1,73 @@
 #!/usr/bin/env bash
-args=("${@:3}")
 
-dir="${args[0]}"
-if [ -e "$dir" ] 
-  then 
-    args=("${args[@]:1}") 
-  else 
-    dir="$(pwd)"
-fi
+error() {
+  local message="$1"
+  echo "error: $message."
+  exit 1
+}
 
+arguments=("${@}")
 
+cut() {
+  declare -n array="$1"
+  array=("${array[@]:1}")
+}
+
+cut arguments
+
+validate() {
+  declare -n array="$1"
+  local argument="$2"
+
+  [[ "${array[0]}" == "$argument" ]] || \
+  error "This has to be run with the '$argument' argument"
+}
+
+validate arguments "--flake"
+
+cut arguments
+
+check() {
+  local type="$1"
+  local path="$2"
+
+  [ "-${type:0:1}" "$path" ]
+}
+
+location() {
+  define -n variable="$1"
+
+  if check "directory" "${variable[0]}"; then
+    cut variable
+    echo "${variable[0]}"
+  else
+    echo "$(pwd)"
+  fi
+}
+
+#location="${arguments[0]}"
+#if check "directory" "$location";
+#  then
+#    arguments=("${arguments[@]:1}") 
+#  else 
+#    location="$(pwd)"
+#fi
+
+search() {
+  local file="$1"
+  local method
+  if [ "$file" != "flake.nix" ]; then
+    local search=""
+  else
+    local search=""
+  fi
+}
 
 tmpdir="$(mktemp -d)"
 
-cp -r -- "$dir"/* "$tmpdir"
+cp -r -- "$location"/* "$tmpdir"
 
-args=("$tmpdir" "${args[@]}")
+arguments=("$tmpdir" "${arguments[@]}")
 
 
 
@@ -27,7 +79,7 @@ done
 
 
 
-/run/current-system/sw/bin/nixos-rebuild "$1" "$2" "${args[@]}"
+/run/current-system/sw/bin/nixos-rebuild "$1" "$2" "${arguments[@]}"
 
 rm -rf "$tmpdir"
 
