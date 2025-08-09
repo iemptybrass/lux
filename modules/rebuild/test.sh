@@ -1,2 +1,1 @@
-        REAL="${pkgs.nixos-rebuild}/bin/nixos-rebuild"
-        exec "$REAL" "$@"
+exec @NIXOS_REBUILD@ "$@"
