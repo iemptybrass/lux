@@ -17,10 +17,7 @@
     (pkgs.writeShellApplication {
       name = "nixos-rebuild";
       runtimeInputs = [ ];
-      text = ''
-        REAL="${pkgs.nixos-rebuild}/bin/nixos-rebuild"
-        exec "$REAL" "$@"
-      '';
+      text = builtins.readFile ./rebuild/test.sh;
 
     })
   ];
