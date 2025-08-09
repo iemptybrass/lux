@@ -16,10 +16,8 @@
   environment.systemPackages = [
     (pkgs.writeShellApplication {
       name = "nixos-rebuild";
-      runtimeInputs = [ pkgs.nix ];
+      runtimeInputs = [ ];
       text = ''
-        #!/usr/bin/env bash
-        set -euo pipefail
         REAL="${pkgs.nixos-rebuild}/bin/nixos-rebuild"
         exec "$REAL" "$@"
       '';
