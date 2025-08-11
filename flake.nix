@@ -13,7 +13,7 @@
       );
   in {
     packages = systems (pkgs: {
-      nixos-rebuild = pkgs.callPackage ./package.nix { inherit pkgs; }
+      nixos-rebuild = pkgs.callPackage ./package.nix { inherit pkgs; };
       default = self.packages.${pkgs.hostPlatform.system}.nixos-rebuild;
   });
 
