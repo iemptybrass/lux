@@ -5,20 +5,17 @@
     self,
     nixpkgs,
     ...
-  }: let
-    systems = ["x86_64-linux" "aarch64-linux"];
-    forAll = nixpkgs.lib.genAttrs systems;
+  }: 
+  let
+    systems = function:
+      nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system:
+        let pkgs = nixpkgs.legacyPackages.${system}; in function pkgs
+      );
   in {
-    packages = nixpkgs.lib.genAttrs ["x86_64-linux" "aarch64-linux"] (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-      script = builtins.readFile ./modules/rebuild/test.sh;
-      real = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
-    in {
-      nixos-rebuild = pkgs.writeShellApplication {
-        name = "nixos-rebuild";
-        text = builtins.replaceStrings ["@NIXOS_REBUILD@"] [real] script;
-      };
-    });
+    packages = systems (pkgs: 
+      nixos-rebuild = pkgs.callPackage ./package.nix { inherit pkgs; }
+      default = self.packages.${pkgs.hostPlatform.system}.nixos-rebuild;
+    );
 
     nixosModules.default = {pkgs, ...}: {
       environment.systemPackages = [self.packages.${pkgs.stdenv.hostPlatform.system}.nixos-rebuild];
