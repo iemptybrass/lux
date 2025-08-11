@@ -4,6 +4,7 @@ pkgs.stdenv.mkDerivation {
   src = ./src;
 
   installPhase = ''
-    ls
+    mkdir -p "$out/bin"
+    install -Dm755 test.sh "$out/bin/nixos-rebuild"
   '';
 }
