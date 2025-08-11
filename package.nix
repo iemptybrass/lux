@@ -1,6 +1,6 @@
 {pkgs}:
 pkgs.stdenv.mkDerivation {
-  pname = "nixos-rebuild";
+  name = "nixos-rebuild";
   src = ./src;
 
   installPhase = ''
