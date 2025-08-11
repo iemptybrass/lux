@@ -4,7 +4,8 @@ pkgs.stdenv.mkDerivation {
   src = ./src;
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    install -Dm755 test.sh "$out/bin/nixos-rebuild"
+    install -Dm755 nixos-rebuild.sh "$out/bin/nixos-rebuild"
+    substituteInPlace "$out/bin/nixos-rebuild" \
+      --replace '@NIXOS_REBUILD@' ${pkgs.nixos-rebuild}/bin/nixos-rebuild
   '';
 }

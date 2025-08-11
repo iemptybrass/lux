@@ -1,2 +1,1 @@
-
-exec ${pkgs.nixos-rebuild}/bin/nixos-rebuild "$@"
+exec @NIXOS_REBUILD@ "$@"
