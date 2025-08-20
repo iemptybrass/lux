@@ -75,7 +75,7 @@ current="./*"
 
 for file in $current; do
     echo "Found: $file"
-done 
+done
 
 
 
