@@ -20,16 +20,5 @@
     nixosModules.default = {pkgs, ...}: {
       environment.systemPackages = [self.packages.${pkgs.stdenv.hostPlatform.system}.nixos-rebuild];
     };
-
-    lib.mkSystem = {
-      system,
-      modules ? [],
-      ...
-    } @ args:
-      nixpkgs.lib.nixosSystem ({
-          inherit system;
-          modules = [self.nixosModules.default] ++ modules;
-        }
-        // (builtins.removeAttrs args ["system" "modules"]));
-  };
+    test = { nixosConfigurations.nixos; }
 }
